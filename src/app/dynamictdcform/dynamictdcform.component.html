@@ -1,0 +1,94 @@
+
+
+<form [formGroup] = "dynamicform" (ngSubmit) = "onSubmit()">
+    
+    <div class = "container">
+      <div class = "row">
+          <div class = "col-md-4"></div>
+          <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+          <div class = "col-md-4">
+              
+  <div *ngIf = "isFormReady">
+
+      <div class="error" *ngIf="dynamicform.invalid && (dynamicform.dirty || dynamicform.touched)">
+          <div *ngIf="dynamicform.errors?.fromDateLessThanToDate">
+            <div class="alert alert-danger">From Date cannot be greater than To Date</div>
+         </div>
+         </div>   
+
+  <div *ngFor="let prop of formObjects">
+    <div  class="form-group"> 
+        
+      <label for="prop">{{prop.labelName}}</label>
+        <div [ngSwitch]="prop.fieldType">
+        
+            <input *ngSwitchCase="'text'"
+              [formControlName]="prop.controlName"
+              [id]="prop.controlName" [type]="prop.fieldType" class = "form-control" item-width="20">
+        
+              <div *ngSwitchCase="'date'">
+                  <div class='input-group date' id='data_move'>
+                    <input type="'text'"
+                      [formControlName]="prop.controlName"
+                      [id]="prop.controlName" [type]="prop.fieldType" class="form-control">
+                  </div>
+                </div>
+    
+
+              <div *ngSwitchCase="'select'">
+                  <select [formControlName]="prop.controlName" class = "form-control">
+                    <option *ngFor="let option of prop.fieldValues" [ngValue]="option">
+                      {{option.value}}
+                    </option>
+                  </select>
+                </div>
+
+                <div *ngSwitchCase="'multiselect'">
+                  <select multiple [formControlName]="prop.controlName" class = "form-control">
+                    <option *ngFor="let option of prop.fieldValues" [ngValue]="option">
+                      {{option.value}}
+                    </option>
+                  </select>
+                </div>
+
+                <div class="error" *ngIf="dynamicform.get(prop.controlName).invalid && (dynamicform.get(prop.controlName).dirty || dynamicform.get(prop.controlName).touched)">
+                  <div *ngIf="dynamicform.get(prop.controlName).errors.required">
+                     <div class="alert alert-danger">This is required field!</div>
+                  </div>
+                  <div *ngIf="dynamicform.get(prop.controlName).errors.futureDateForbidden">
+                    <div class="alert alert-danger">Please enter a preivous date</div>
+                 </div>                 
+                </div> 
+        </div>
+    </div>
+    
+  </div>
+</div>
+
+</div>
+<div class = "col-md-4"></div>
+</div></div>
+
+<div class = "container">
+  <div class = "row">
+    <div class = "col-md-4"></div>
+    
+    <div class = "col-md-4">
+    <button class="btn btn-submit" [disabled] = "enabled">Clean Data</button>
+  </div>
+    <div class = "col-md-4"></div>
+  </div>
+  </div>
+  <br>
+  <div class = "container">
+      <div class = "col-md-4"></div>
+      <div class = "col-md-4">
+      <div *ngIf = "processing"><i class="fa fa-circle-o-notch fa-spin" style="font-size:24px"></i></div>
+      
+      <div *ngIf = "operationMessage">
+           {{operationMessage}}
+      </div>
+        </div>
+        <div class = "col-md-4"></div>
+      </div>
+</form>

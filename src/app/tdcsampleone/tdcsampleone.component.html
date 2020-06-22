@@ -1,0 +1,30 @@
+
+<form [formGroup] = "form" class="form-horizontal">
+<div class = "container">
+<div class = "row">
+    <span class = "col-md-4"></span>
+  
+    <span class = "col-md-4">
+<div class="form-group">
+      <div *ngIf = 'unexpectedErrorOne'>
+    <div class="alert alert-danger">{{unexpectedErrorOne}}</div>
+  </div>
+    <label for="prop">Cleanup Components:</label>
+  <select formControlName="components" id="components" class = "form-control" (change) = "onSelect()" >
+    <option value="">--</option>
+    <option *ngFor = "let eachddlitem of someddlvalues" [ngValue] = "eachddlitem">{{eachddlitem.value}}</option>
+  </select>
+</div>
+</span>
+<span class = "col-md-4"></span>
+</div>
+</div>
+</form>
+
+
+
+<div class = "dynamicForm" *ngIf = "initialFieldValues">
+    <app-dynamictdcform [formObjects] = "initialFieldValues" [componentSelected] = "componentName" [groupValidators] = 'groupValidators'></app-dynamictdcform>
+  </div>
+  
+  
